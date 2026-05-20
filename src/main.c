@@ -1,8 +1,8 @@
 #include "device.h"
 #include "oui.h"
+#include "output.h"
 #include "scan.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #ifndef NETSCAN_OUI_PATH
@@ -15,11 +15,13 @@ static void print_usage(FILE *stream) {
             "\n"
             "Options:\n"
             "  -i <interface>   Scan with a specific network interface\n"
+            "  --demo           Print sample scan output without using the network\n"
             "  -h, --help       Show this help message\n"
             "\n"
             "Examples:\n"
             "  sudo netscan\n"
-            "  sudo netscan -i wlp0s20f3\n");
+            "  sudo netscan -i wlp0s20f3\n"
+            "  netscan --demo\n");
 }
 
 int main(int argc, char **argv) {
@@ -28,6 +30,8 @@ int main(int argc, char **argv) {
     if(argc == 2 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
         print_usage(stdout);
         return 0;
+    } else if(argc == 2 && strcmp(argv[1], "--demo") == 0) {
+        return output_print_demo_scan();
     } else if(argc == 3 && strcmp(argv[1], "-i") == 0) {
         iface_name = argv[2];
     } else if(argc != 1) {
@@ -61,22 +65,8 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    printf(" Found %zu devices:\n", device_list.count);
-    printf("  \033[97m%-15s  %-17s  %s\033[0m\n", "IP", "MAC", "Device Type");
-
-    for(size_t i = 0; i < device_list.count; i++) {
-        const char *vendor = oui_loaded ? oui_lookup(device_list.items[i].mac) : NULL;
-        printf("  %-15s  %-17s  ", device_list.items[i].ip,
-               device_list.items[i].mac);
-        if(vendor) {
-            printf("%s\n", vendor);
-        } else {
-            printf("\033[91mUnknown\033[0m\n");
-        }
-    }
-    char elapsed_str[64];
-    snprintf(elapsed_str, sizeof(elapsed_str), "=== Completed: %.3f seconds ===\n", elapsed_seconds);
-    printf("\033[38;5;33m%35s\033[0m\n", elapsed_str);
+    output_print_device_table(&device_list, oui_loaded);
+    output_print_elapsed(elapsed_seconds);
     oui_free();
     device_list_free(&device_list);
 

@@ -1,4 +1,4 @@
-# NetScan
+﻿# NetScan
 
 NetScan is a small C network scanner that discovers devices on a local IPv4 network with ARP requests and labels each device with a vendor name from an OUI database.
 
@@ -47,6 +47,12 @@ View command help:
 ./build/netscan --help
 ```
 
+Print screenshot-safe sample output without scanning the network:
+
+```sh
+./build/netscan --demo
+```
+
 ## Install
 
 Install to `/usr/local`:
@@ -71,6 +77,12 @@ List available interfaces with:
 
 ```sh
 ip addr
+```
+
+For documentation, portfolios, or screenshots, use demo mode instead of showing a real LAN scan:
+
+```sh
+netscan --demo
 ```
 
 Install somewhere else by overriding `PREFIX`:
