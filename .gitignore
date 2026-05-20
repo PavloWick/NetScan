@@ -1,0 +1,6 @@
+build/
+netscan
+netscan.log
+*.o
+*.d
+compile_flags.txt
