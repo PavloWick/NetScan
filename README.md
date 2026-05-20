@@ -12,6 +12,9 @@ It is intended as a practical systems/networking project: it uses raw packet cap
 - Resolves MAC prefixes to vendor names using the included OUI database.
 - Installs a global `netscan` command that can be run from any directory.
 
+## Demo
+![NetScan demo output](imgs/NetScanDemo.png)
+
 ## Requirements
 
 NetScan currently targets Linux.
